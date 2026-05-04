@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yumu — Stories in Fabric</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* Force Chinese font rendering */
+html, body, p, span, div, h1, h2, h3, h4, li, a, label, option, textarea, input, select, button {
+  font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+}
+.hero-title, .section-title, .product-name, .craft-name, .about-title,
+.quote-text, .hero-tagline, .footer-logo, .nav-logo, .stat-num {
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', 'PingFang TC', serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:    #17150f;
+  --stone:  #3d3a30;
+  --bark:   #6b5c42;
+  --moss:   #4a6050;
+  --indigo: #3b4f68;
+  --ochre:  #9a7c3a;
+  --mist:   #e2ddd4;
+  --paper:  #f2ede4;
+  --cream:  #f8f5ee;
+  --fog:    #c8c2b4;
+  --serif: 'Cormorant Garamond', 'Noto Serif TC', 'PingFang TC', serif;
+  --sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.3rem 3.5rem;
+  background: rgba(248,245,238,0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(107,92,66,0.1);
+}
+.nav-brand { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.4rem; font-weight: 300;
+  letter-spacing: 0.3em; color: var(--ink);
+  line-height: 1;
+}
+.nav-sub {
+  font-size: 0.55rem; letter-spacing: 0.22em;
+  color: var(--bark); text-transform: uppercase;
+  margin-top: 2px;
+  font-weight: 400;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-size: 0.72rem; letter-spacing: 0.2em;
+  color: var(--stone); text-decoration: none;
+  text-transform: uppercase; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--moss); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 55% 45%;
+  padding-top: 0;
+}
+
+.hero-visual {
+  position: relative; overflow: hidden;
+  background: #1e2430;
+}
+
+/* Fabric collage using CSS + actual photo colors */
+.fabric-bg {
+  width: 100%; height: 100%;
+  position: absolute; inset: 0;
+  display: grid; grid-template-rows: 1fr 1fr;
+}
+.fabric-row { display: grid; }
+.fabric-row:first-child { grid-template-columns: 1fr 1fr 1fr; }
+.fabric-row:last-child  { grid-template-columns: 1fr 1fr; }
+
+.fswatch {
+  position: relative; overflow: hidden;
+  transition: transform 0.6s;
+}
+.fswatch::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(23,21,15,0.18);
+  transition: background 0.4s;
+}
+.fswatch:hover::after { background: rgba(23,21,15,0.05); }
+.fswatch:hover { transform: scale(1.03); z-index: 2; }
+
+/* Color patches inspired by actual product photos */
+.fs1 { background: linear-gradient(135deg, #2a3d5a 0%, #4a6050 40%, #8a7a3a 100%); }
+.fs2 { background: linear-gradient(160deg, #1c3050 0%, #3a5468 50%, #6a8090 100%); }
+.fs3 { background: linear-gradient(120deg, #5c4a20 0%, #8a6a30 50%, #b89040 100%); }
+.fs4 { background: linear-gradient(145deg, #1a2838 0%, #2a3d5a 40%, #3a5060 70%, #5a7260 100%); }
+.fs5 { background: linear-gradient(170deg, #3a2818 0%, #6a4a28 40%, #9a7040 70%, #b89060 100%); }
+
+/* Texture overlay on fabric patches */
+.fswatch canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0.35; mix-blend-mode: overlay;
+}
+
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(23,21,15,0.3) 0%, transparent 100%);
+  z-index: 3;
+}
+
+.hero-badge {
+  position: absolute; bottom: 2rem; left: 2rem; z-index: 4;
+  font-size: 0.62rem; letter-spacing: 0.25em;
+  color: rgba(242,237,228,0.6); text-transform: uppercase;
+}
+
+.hero-content {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 4rem 4rem;
+  background: var(--cream);
+}
+
+.hero-eyebrow {
+  font-size: 0.68rem; letter-spacing: 0.35em;
+  color: var(--bark); text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 5.5vw, 5.5rem);
+  font-weight: 300; line-height: 1;
+  letter-spacing: 0.05em; color: var(--ink);
+  opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+}
+.hero-title em { font-style: italic; color: var(--moss); display: block; margin-top: 0.1em; }
+
+.hero-tagline {
+  margin-top: 2rem;
+  font-family: var(--serif);
+  font-size: 1rem; font-style: italic;
+  color: var(--bark); line-height: 1.6;
+  opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+}
+
+.hero-desc {
+  margin-top: 1.5rem;
+  font-size: 0.82rem; color: var(--stone);
+  line-height: 2.1; max-width: 380px;
+  opacity: 0; animation: fadeUp 0.9s 1s forwards;
+}
+
+.hero-cta {
+  margin-top: 3rem; display: flex; gap: 1.2rem; align-items: center;
+  opacity: 0; animation: fadeUp 0.9s 1.2s forwards;
+}
+
+.btn-primary {
+  display: inline-block; padding: 0.85rem 2.2rem;
+  background: var(--indigo); color: var(--cream);
+  font-size: 0.72rem; letter-spacing: 0.2em;
+  text-transform: uppercase; text-decoration: none;
+  transition: background 0.3s, transform 0.2s;
+}
+.btn-primary:hover { background: var(--ink); transform: translateY(-2px); }
+
+.btn-ghost {
+  font-size: 0.72rem; letter-spacing: 0.15em;
+  color: var(--bark); text-decoration: none;
+  border-bottom: 1px solid var(--bark); padding-bottom: 2px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.btn-ghost:hover { color: var(--moss); border-color: var(--moss); }
+
+.hero-stats {
+  margin-top: 4rem; padding-top: 2rem;
+  border-top: 1px solid var(--fog);
+  display: flex; gap: 3rem;
+  opacity: 0; animation: fadeUp 0.9s 1.4s forwards;
+}
+.stat-num {
+  font-family: var(--serif); font-size: 2rem;
+  font-weight: 300; color: var(--ink); line-height: 1;
+}
+.stat-label {
+  font-size: 0.62rem; letter-spacing: 0.15em;
+  color: var(--bark); text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+/* ── ABOUT ── */
+#about {
+  padding: 9rem 5rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 7rem; align-items: center;
+  background: var(--paper);
+}
+
+.section-label {
+  font-size: 0.62rem; letter-spacing: 0.4em;
+  color: var(--bark); text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 300; line-height: 1.2; color: var(--ink);
+}
+.section-title em { font-style: italic; color: var(--moss); }
+
+.about-body {
+  margin-top: 2rem;
+  font-size: 0.85rem; color: var(--stone); line-height: 2.2;
+}
+.about-body p + p { margin-top: 1.2rem; }
+
+.quote-block {
+  margin-top: 2.5rem; padding: 1.8rem 2rem;
+  border-left: 2px solid var(--moss);
+  background: rgba(74,96,80,0.06);
+}
+.quote-text {
+  font-family: var(--serif); font-size: 1.05rem;
+  font-style: italic; color: var(--moss); line-height: 1.7;
+}
+.quote-source {
+  margin-top: 0.6rem; font-size: 0.65rem;
+  letter-spacing: 0.2em; color: var(--bark);
+  text-transform: uppercase;
+}
+
+/* Color palette visual */
+.palette-wrap { position: relative; }
+.palette-title {
+  font-size: 0.62rem; letter-spacing: 0.25em;
+  color: var(--bark); text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.palette-row { display: flex; gap: 2px; margin-bottom: 2px; }
+.swatch-block {
+  flex: 1; aspect-ratio: 1.2;
+  position: relative; cursor: default;
+  transition: transform 0.3s, flex 0.4s;
+}
+.swatch-block:hover { flex: 1.6; transform: translateY(-4px); }
+.swatch-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 0.5rem 0.4rem; opacity: 0;
+  transition: opacity 0.3s; text-align: center;
+}
+.swatch-block:hover .swatch-info { opacity: 1; }
+.swatch-name { font-size: 0.58rem; letter-spacing: 0.1em; }
+
+.palette-desc {
+  margin-top: 1.5rem; font-size: 0.75rem;
+  color: var(--bark); line-height: 1.8;
+}
+
+/* ── PRODUCTS ── */
+#products {
+  padding: 9rem 5rem;
+  background: var(--cream);
+}
+
+.section-header {
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: end; margin-bottom: 4rem;
+  padding-bottom: 2rem; border-bottom: 1px solid var(--fog);
+}
+.section-num {
+  font-family: var(--serif); font-size: 5rem;
+  color: var(--mist); font-weight: 300; line-height: 1;
+}
+
+.products-masonry {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 3px;
+}
+
+.product-card {
+  position: relative; overflow: hidden;
+  background: var(--mist); cursor: pointer;
+  group: true;
+}
+.product-card:first-child {
+  grid-row: span 2;
+}
+
+.product-img {
+  width: 100%; display: block;
+  aspect-ratio: 3/4; object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.product-card:first-child .product-img { aspect-ratio: 2/3; height: 100%; }
+.product-card:hover .product-img { transform: scale(1.05); }
+
+/* Fabric illustration canvases as product placeholders */
+.product-canvas {
+  width: 100%; display: block;
+  transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.product-card:first-child .product-canvas { height: 100%; min-height: 500px; }
+.product-card:not(:first-child) .product-canvas { aspect-ratio: 4/3; }
+.product-card:hover .product-canvas { transform: scale(1.05); }
+
+.product-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(23,21,15,0.75) 0%, rgba(23,21,15,0) 55%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 2rem;
+  transform: translateY(4px);
+  transition: transform 0.4s;
+}
+.product-card:hover .product-overlay { transform: translateY(0); }
+
+.product-name {
+  font-family: var(--serif); font-size: 1.3rem;
+  font-weight: 300; color: var(--cream); line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+.product-tag {
+  font-size: 0.62rem; letter-spacing: 0.2em;
+  color: rgba(242,237,228,0.65); text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.product-price {
+  font-size: 0.78rem; color: rgba(242,237,228,0.85);
+}
+.product-btn {
+  display: inline-block; margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgba(242,237,228,0.5);
+  color: var(--cream); font-size: 0.65rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  text-decoration: none; width: fit-content;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s 0.05s, transform 0.3s 0.05s, background 0.2s;
+}
+.product-card:hover .product-btn { opacity: 1; transform: translateY(0); }
+.product-btn:hover { background: rgba(242,237,228,0.15); }
+
+/* ── CRAFT ── */
+#craft {
+  padding: 9rem 5rem;
+  background: var(--ink);
+  color: var(--mist);
+}
+#craft .section-title { color: var(--mist); }
+#craft .section-num { color: rgba(255,255,255,0.05); }
+#craft .section-label { color: var(--ochre); }
+
+.craft-grid {
+  margin-top: 5rem;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: rgba(232,221,212,0.08);
+}
+.craft-item {
+  padding: 3.5rem 3rem;
+  background: var(--ink);
+  border: 1px solid rgba(232,221,212,0.07);
+  transition: background 0.3s;
+}
+.craft-item:hover { background: rgba(59,79,104,0.15); }
+
+.craft-num {
+  font-family: var(--serif); font-size: 4rem;
+  color: rgba(255,255,255,0.06); line-height: 1;
+  margin-bottom: 1.5rem;
+}
+.craft-name {
+  font-family: var(--serif); font-size: 1.3rem;
+  color: var(--paper); margin-bottom: 1rem; font-weight: 300;
+}
+.craft-desc {
+  font-size: 0.8rem; color: var(--fog); line-height: 2.1;
+}
+.craft-tag {
+  display: inline-block; margin-top: 1.5rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(154,124,58,0.4);
+  font-size: 0.6rem; letter-spacing: 0.2em;
+  color: var(--ochre); text-transform: uppercase;
+}
+
+/* ── MARKET ── */
+#market {
+  padding: 7rem 5rem;
+  background: var(--paper);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: center;
+}
+.market-visual {
+  position: relative;
+}
+.market-canvas {
+  width: 100%; aspect-ratio: 4/3; display: block;
+  border: 1px solid var(--fog);
+}
+.market-badge {
+  position: absolute; top: -1rem; right: -1rem;
+  background: var(--moss); color: var(--cream);
+  padding: 0.8rem 1.2rem; text-align: center;
+}
+.market-badge-num {
+  font-family: var(--serif); font-size: 1.8rem;
+  font-weight: 300; line-height: 1;
+}
+.market-badge-text {
+  font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; display: block; margin-top: 2px;
+}
+.market-list {
+  margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;
+}
+.market-item {
+  display: flex; align-items: center; gap: 1rem;
+  font-size: 0.82rem; color: var(--stone);
+}
+.market-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--moss); flex-shrink: 0;
+}
+
+/* ── CONTACT ── */
+#contact {
+  padding: 9rem 5rem;
+  background: var(--cream);
+  display: grid; grid-template-columns: 1fr 1.1fr;
+  gap: 7rem; align-items: start;
+}
+
+.contact-ig {
+  margin-top: 2.5rem;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid var(--fog);
+  text-decoration: none;
+  transition: border-color 0.3s, background 0.3s;
+}
+.contact-ig:hover { border-color: var(--moss); background: rgba(74,96,80,0.04); }
+.ig-icon { font-size: 1.4rem; }
+.ig-info { display: flex; flex-direction: column; gap: 2px; }
+.ig-handle { font-size: 0.88rem; color: var(--ink); letter-spacing: 0.05em; }
+.ig-meta { font-size: 0.65rem; color: var(--bark); letter-spacing: 0.1em; }
+
+.contact-details {
+  margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem;
+}
+.contact-row { display: flex; gap: 1rem; }
+.contact-key {
+  font-size: 0.62rem; letter-spacing: 0.2em;
+  color: var(--bark); text-transform: uppercase;
+  min-width: 52px; padding-top: 0.2rem; flex-shrink: 0;
+}
+.contact-val { font-size: 0.82rem; color: var(--stone); line-height: 1.7; }
+
+/* Form */
+.order-form { display: flex; flex-direction: column; gap: 1.4rem; }
+.form-label {
+  font-size: 0.62rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--bark);
+  display: block; margin-bottom: 0.5rem;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%; background: var(--paper);
+  border: 1px solid var(--fog);
+  padding: 0.9rem 1.1rem;
+  font-family: var(--sans); font-size: 0.83rem;
+  color: var(--ink); font-weight: 300;
+  outline: none; transition: border-color 0.3s;
+  appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--moss);
+}
+.form-textarea { resize: vertical; min-height: 110px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 2.8rem 3.5rem;
+  background: var(--ink); color: var(--mist);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-logo {
+  font-family: var(--serif); font-size: 1.3rem;
+  font-weight: 300; letter-spacing: 0.3em;
+}
+.footer-tagline {
+  font-size: 0.65rem; letter-spacing: 0.15em; color: var(--stone);
+  font-style: italic;
+}
+.footer-links { display: flex; gap: 2rem; list-style: none; }
+.footer-links a {
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  color: var(--fog); text-decoration: none;
+  text-transform: uppercase; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--moss); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  nav { padding: 1.1rem 1.5rem; }
+  .nav-links { gap: 1.5rem; }
+  #hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-visual { height: 55vw; }
+  .hero-content { padding: 4rem 2rem 4rem; }
+  #about, #contact, #market { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+  #products, #craft { padding: 5rem 2rem; }
+  .products-masonry { grid-template-columns: 1fr 1fr; }
+  .product-card:first-child { grid-row: span 1; }
+  .craft-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem; }
+  .hero-stats { gap: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <span class="nav-logo">YUMU</span>
+    <span class="nav-sub">Stories in Fabric · Crafted with Time</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">語木</a></li>
+    <li><a href="#products">作品</a></li>
+    <li><a href="#craft">工藝</a></li>
+    <li><a href="#contact">訂購</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-visual">
+    <div class="fabric-bg">
+      <div class="fabric-row">
+        <div class="fswatch fs1"></div>
+        <div class="fswatch fs2"></div>
+        <div class="fswatch fs3"></div>
+      </div>
+      <div class="fabric-row">
+        <div class="fswatch fs4"></div>
+        <div class="fswatch fs5"></div>
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-badge">@yumuhandmade · 台灣草木染</div>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">天然植物染色 · 手工布藝</p>
+    <h1 class="hero-title">YUMU<em>語木</em></h1>
+    <p class="hero-tagline">Stories in Fabric &amp; Crafted with Time</p>
+    <p class="hero-desc">
+      「語木」象徵與大地的對話，將故事編織進布料裡。<br>
+      我們以自然為師，運用植物的色彩，將自然的氣息織入日常——是一個專注於天然染織與手工布藝的品牌。
+    </p>
+    <div class="hero-cta">
+      <a href="#products" class="btn-primary">探索作品</a>
+      <a href="#contact" class="btn-ghost">詢問訂製</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">111</div>
+        <div class="stat-label">件作品</div>
+      </div>
+      <div>
+        <div class="stat-num">手工</div>
+        <div class="stat-label">每件染製</div>
+      </div>
+      <div>
+        <div class="stat-num">植物</div>
+        <div class="stat-label">天然染料</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">品牌故事</p>
+    <h2 class="section-title">與大地<em>對話</em></h2>
+    <div class="about-body">
+      <p>YUMU 語木，是一場與自然的長期對話。我們相信每一塊石頭、每一片葉脈、每一段樹皮都藏著顏色——等待被萃取、被記錄、被穿在身上。</p>
+      <p>從台灣在地植物採集染料，以藍靛、相思木、野薑花等為顏料，透過浸染、型染、紮染等技法，讓每一件作品都成為一段無法複製的自然印記。</p>
+    </div>
+    <div class="quote-block">
+      <p class="quote-text">「將故事編織進布料裡，讓自然的氣息織入日常。」</p>
+      <p class="quote-source">Yumu · 語木</p>
+    </div>
+  </div>
+
+  <div class="about-visual reveal" style="transition-delay:0.15s">
+    <p class="palette-title">天然色譜 — 植物染料</p>
+    <div class="palette-row">
+      <div class="swatch-block" style="background:#3b4f68;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#b0c4d8;">藍靛深</span></div>
+      </div>
+      <div class="swatch-block" style="background:#526878;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#c0d4e0;">山青</span></div>
+      </div>
+      <div class="swatch-block" style="background:#6a8890;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#d0e4e8;">霧藍</span></div>
+      </div>
+      <div class="swatch-block" style="background:#90aaa8;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#1a3038;">淺靛</span></div>
+      </div>
+    </div>
+    <div class="palette-row">
+      <div class="swatch-block" style="background:#4a6050;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#c0d8c0;">艾草綠</span></div>
+      </div>
+      <div class="swatch-block" style="background:#6a7858;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#d0e0c0;">山嵐</span></div>
+      </div>
+      <div class="swatch-block" style="background:#9a7c3a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#f0e0a0;">薑黃</span></div>
+      </div>
+      <div class="swatch-block" style="background:#7a5c2a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#e0c888;">相思棕</span></div>
+      </div>
+    </div>
+    <div class="palette-row">
+      <div class="swatch-block" style="background:#5a3820;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#d8b890;">苦楝深</span></div>
+      </div>
+      <div class="swatch-block" style="background:#8a6040;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#e8c898;">土陶</span></div>
+      </div>
+      <div class="swatch-block" style="background:#b89070;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2018;">野薑橙</span></div>
+      </div>
+      <div class="swatch-block" style="background:#c8a888;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#2a1808;">稻穗</span></div>
+      </div>
+    </div>
+    <p class="palette-desc">↑ 懸停色塊查看色名 · 皆來自台灣在地植物萃取</p>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">精選作品</p>
+      <h2 class="section-title">每件，都是<em>孤品</em></h2>
+    </div>
+    <span class="section-num">02</span>
+  </div>
+
+  <div class="products-masonry">
+    <!-- Card 1 — tall feature -->
+    <div class="product-card reveal">
+      <canvas class="product-canvas" id="pc1"></canvas>
+      <div class="product-overlay">
+        <div class="product-tag">藍靛草 · 亞麻 · 型染</div>
+        <div class="product-name">藍靛動物型染<br>圍巾</div>
+        <div class="product-price">NT$ 2,200 起</div>
+        <a href="#contact" class="product-btn">詢問訂購</a>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="product-card reveal" style="transition-delay:0.1s">
+      <canvas class="product-canvas" id="pc2"></canvas>
+      <div class="product-overlay">
+        <div class="product-tag">多色植物染 · 手工漸層</div>
+        <div class="product-name">山色漸層圍巾</div>
+        <div class="product-price">NT$ 1,800 起</div>
+        <a href="#contact" class="product-btn">詢問訂購</a>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="product-card reveal" style="transition-delay:0.2s">
+      <canvas class="product-canvas" id="pc3"></canvas>
+      <div class="product-overlay">
+        <div class="product-tag">藍靛草 · 棉麻 · 紮染</div>
+        <div class="product-name">靛藍條紋<br>麻布巾</div>
+        <div class="product-price">NT$ 1,600 起</div>
+        <a href="#contact" class="product-btn">詢問訂購</a>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="product-card reveal" style="transition-delay:0.15s">
+      <canvas class="product-canvas" id="pc4"></canvas>
+      <div class="product-overlay">
+        <div class="product-tag">大地色系 · 漸層染</div>
+        <div class="product-name">大地色系托特包</div>
+        <div class="product-price">NT$ 2,800 起</div>
+        <a href="#contact" class="product-btn">詢問訂購</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRAFT -->
+<section id="craft">
+  <div class="section-header reveal" style="border-bottom-color:rgba(232,221,212,0.1)">
+    <div>
+      <p class="section-label">製作工藝</p>
+      <h2 class="section-title">慢工，<em>出細活</em></h2>
+    </div>
+    <span class="section-num">03</span>
+  </div>
+
+  <div class="craft-grid">
+    <div class="craft-item reveal">
+      <div class="craft-num">01</div>
+      <div class="craft-name">採集植材</div>
+      <p class="craft-desc">依季節採集台灣在地植物，藍靛草、相思木、艾草、野薑花……每批染料因時節不同而有細微色差，這正是草木染的靈魂所在。</p>
+      <span class="craft-tag">台灣在地植物</span>
+    </div>
+    <div class="craft-item reveal" style="transition-delay:0.1s">
+      <div class="craft-num">02</div>
+      <div class="craft-name">萃取染液</div>
+      <p class="craft-desc">以文火長時間煎煮植材，萃取天然色素。每鍋染液都是獨一無二的調色盤，色彩的深淺由時間與火候決定。</p>
+      <span class="craft-tag">天然色素萃取</span>
+    </div>
+    <div class="craft-item reveal" style="transition-delay:0.15s">
+      <div class="craft-num">03</div>
+      <div class="craft-name">型染 · 紮染</div>
+      <p class="craft-desc">以型紙印出花紋，或透過紮綁製造自然暈染——藍靛動物圖案、螺旋紋、漸層條紋，每一種技法都是與布料的對話。</p>
+      <span class="craft-tag">手工技法</span>
+    </div>
+    <div class="craft-item reveal" style="transition-delay:0.2s">
+      <div class="craft-num">04</div>
+      <div class="craft-name">媒染固色</div>
+      <p class="craft-desc">以明礬、鐵媒等天然媒染劑讓色素與纖維深度結合，洗滌後仍保有自然色澤，隨歲月越染越有溫度。</p>
+      <span class="craft-tag">天然固色</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="market-visual reveal">
+    <canvas class="market-canvas" id="mc1"></canvas>
+    <div class="market-badge">
+      <div class="market-badge-num">市集</div>
+      <span class="market-badge-text">實體展售</span>
+    </div>
+  </div>
+  <div class="reveal" style="transition-delay:0.15s">
+    <p class="section-label">實體市集</p>
+    <h2 class="section-title">親手感受<em>質地</em></h2>
+    <div class="about-body">
+      <p>布料的溫度需要親手感受。YUMU 定期出現在台灣各地的文創市集與展覽，歡迎來攤位上親手觸摸每一件作品的質地與色彩。</p>
+    </div>
+    <div class="market-list">
+      <div class="market-item"><div class="market-dot"></div>不定期參加台北、台中文創市集</div>
+      <div class="market-item"><div class="market-dot"></div>可接受工作坊、聯展合作邀請</div>
+      <div class="market-item"><div class="market-dot"></div>最新活動資訊請追蹤 IG @yumuhandmade</div>
+    </div>
+    <a href="https://www.instagram.com/yumuhandmade/" target="_blank" class="contact-ig" style="margin-top:2rem">
+      <span class="ig-icon">📷</span>
+      <div class="ig-info">
+        <span class="ig-handle">@yumuhandmade</span>
+        <span class="ig-meta">追蹤 IG 掌握最新市集資訊</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">聯繫 · 訂購</p>
+    <h2 class="section-title">讓布料<em>說故事</em></h2>
+    <div class="about-body" style="margin-top:1.5rem">
+      <p>所有作品均為手工染製，每件需 7–14 個工作天。歡迎訂製——顏色、尺寸、染法皆可討論。</p>
+    </div>
+    <a href="https://www.instagram.com/yumuhandmade/" target="_blank" class="contact-ig">
+      <span class="ig-icon">📷</span>
+      <div class="ig-info">
+        <span class="ig-handle">@yumuhandmade</span>
+        <span class="ig-meta">Instagram · 111 件作品 · 直接 DM 洽詢</span>
+      </div>
+    </a>
+    <div class="contact-details">
+      <div class="contact-row">
+        <span class="contact-key">出貨</span>
+        <span class="contact-val">下單後 7–14 個工作天</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-key">訂製</span>
+        <span class="contact-val">接受顏色、圖案、尺寸客製，歡迎來信討論</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-key">物流</span>
+        <span class="contact-val">台灣宅配 · 超商取貨</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="transition-delay:0.15s">
+    <p class="section-label" style="margin-bottom:1.5rem">填寫詢問表單</p>
+    <div class="order-form">
+      <div class="form-row">
+        <div>
+          <label class="form-label">姓名</label>
+          <input class="form-input" type="text" placeholder="您的名字">
+        </div>
+        <div>
+          <label class="form-label">聯絡方式</label>
+          <input class="form-input" type="text" placeholder="Email 或 IG 帳號">
+        </div>
+      </div>
+      <div>
+        <label class="form-label">感興趣的品項</label>
+        <select class="form-select">
+          <option value="">請選擇</option>
+          <option>藍靛動物型染圍巾</option>
+          <option>山色漸層圍巾</option>
+          <option>靛藍條紋麻布巾</option>
+          <option>大地色系托特包</option>
+          <option>訂製服務（顏色 / 圖案）</option>
+          <option>其他</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">需求說明</label>
+        <textarea class="form-textarea" placeholder="請描述您的需求，例如：顏色偏好、尺寸、數量、或特別想法…"></textarea>
+      </div>
+      <button class="btn-primary" style="border:none;cursor:pointer;padding:1rem 2.5rem;width:fit-content">送出詢問</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">YUMU</div>
+  <p class="footer-tagline">Stories in Fabric · Crafted with Time</p>
+  <ul class="footer-links">
+    <li><a href="#about">語木</a></li>
+    <li><a href="#products">作品</a></li>
+    <li><a href="#craft">工藝</a></li>
+    <li><a href="#contact">訂購</a></li>
+  </ul>
+</footer>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Canvas fabric illustrations
+function grain(ctx, W, H, alpha) {
+  ctx.save(); ctx.globalAlpha = alpha;
+  for (let i = 0; i < 6000; i++) {
+    ctx.fillStyle = Math.random() > 0.5 ? '#fff' : '#000';
+    ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+  }
+  ctx.restore();
+}
+
+function drawIndigo(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const dpr = devicePixelRatio || 1;
+  c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const W = c.offsetWidth, H = c.offsetHeight;
+
+  // Deep indigo background
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#1a2840'); g.addColorStop(0.5, '#2a3f60'); g.addColorStop(1, '#1e3050');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // Animal silhouette (cat-like, dots)
+  ctx.save(); ctx.globalAlpha = 0.9;
+  ctx.fillStyle = 'rgba(220,235,245,0.85)';
+  // Dots forming animal shape
+  const dots = [
+    [0.35,0.3,4],[0.38,0.28,3],[0.4,0.27,4],[0.43,0.28,3],[0.46,0.3,4],
+    [0.48,0.33,5],[0.5,0.36,5],[0.5,0.4,6],[0.48,0.44,5],[0.45,0.47,5],
+    [0.42,0.5,4],[0.38,0.52,5],[0.35,0.54,5],[0.32,0.55,4],[0.3,0.53,3],
+    [0.28,0.5,4],[0.27,0.46,3],[0.28,0.42,4],[0.3,0.38,4],[0.32,0.34,4],
+    [0.35,0.3,4],[0.37,0.35,3],[0.4,0.38,3],[0.43,0.4,3],[0.45,0.43,3],
+    [0.4,0.33,2],[0.36,0.38,2],[0.42,0.45,2],[0.35,0.48,2],[0.3,0.44,2],
+  ];
+  dots.forEach(([x,y,r]) => {
+    ctx.beginPath(); ctx.arc(x*W, y*H, r, 0, Math.PI*2); ctx.fill();
+  });
+  // Botanical spray
+  for (let i = 0; i < 40; i++) {
+    const x = (0.15 + Math.random()*0.7)*W, y = (0.6 + Math.random()*0.35)*H, r = 1+Math.random()*2.5;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+
+  // Wax resist horizontal lines
+  ctx.save(); ctx.globalAlpha = 0.08;
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
+  for (let y = 0; y < H; y += 6) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  ctx.restore();
+  grain(ctx, W, H, 0.05);
+}
+
+function drawGradient(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const dpr = devicePixelRatio || 1;
+  c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const W = c.offsetWidth, H = c.offsetHeight;
+  const g = ctx.createLinearGradient(0, 0, W*0.6, H);
+  g.addColorStop(0, '#4a6050'); g.addColorStop(0.3, '#6a7858');
+  g.addColorStop(0.55, '#9a8c60'); g.addColorStop(0.75, '#7a6040');
+  g.addColorStop(1, '#3a2828');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // Fabric texture lines
+  ctx.save(); ctx.globalAlpha = 0.07; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.7;
+  for (let y = 0; y < H; y += 4) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  ctx.restore();
+  grain(ctx, W, H, 0.06);
+}
+
+function drawStripe(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const dpr = devicePixelRatio || 1;
+  c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const W = c.offsetWidth, H = c.offsetHeight;
+  const colors = ['#1a2840','#2a3d5a','#3a5068','#4a6278','#3a4858','#2a3848'];
+  const stripeW = W / colors.length;
+  colors.forEach((col, i) => {
+    ctx.fillStyle = col;
+    ctx.fillRect(i*stripeW, 0, stripeW, H);
+  });
+  ctx.save(); ctx.globalAlpha = 0.15; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
+  for (let y = 0; y < H; y += 3) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  ctx.restore();
+  grain(ctx, W, H, 0.05);
+}
+
+function drawEarth(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const dpr = devicePixelRatio || 1;
+  c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const W = c.offsetWidth, H = c.offsetHeight;
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#5a3820'); g.addColorStop(0.4, '#8a6040');
+  g.addColorStop(0.7, '#b89070'); g.addColorStop(1, '#c8a080');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // Wash blobs
+  ctx.save();
+  for (let i = 0; i < 5; i++) {
+    const rg = ctx.createRadialGradient(
+      Math.random()*W, Math.random()*H, 0,
+      Math.random()*W, Math.random()*H, 60+Math.random()*80
+    );
+    rg.addColorStop(0, 'rgba(80,40,10,0.3)'); rg.addColorStop(1, 'transparent');
+    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+  }
+  ctx.restore();
+  grain(ctx, W, H, 0.06);
+}
+
+function drawMarket(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const dpr = devicePixelRatio || 1;
+  c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const W = c.offsetWidth, H = c.offsetHeight;
+  // Background
+  ctx.fillStyle = '#2a3848'; ctx.fillRect(0, 0, W, H);
+  // Hanging fabric panels
+  const panels = [
+    { x: 0.05, w: 0.18, col1: '#4a6050', col2: '#6a8070' },
+    { x: 0.27, w: 0.22, col1: '#3b4f68', col2: '#1a2840' },
+    { x: 0.53, w: 0.18, col1: '#9a7c3a', col2: '#7a5c28' },
+    { x: 0.75, w: 0.22, col1: '#3b4f68', col2: '#5a7280' },
+  ];
+  panels.forEach(p => {
+    const g = ctx.createLinearGradient(p.x*W, 0, p.x*W, H*0.85);
+    g.addColorStop(0, p.col1); g.addColorStop(1, p.col2);
+    ctx.fillStyle = g;
+    // Slightly wavy panel
+    ctx.beginPath();
+    ctx.moveTo(p.x*W, 0.05*H);
+    ctx.quadraticCurveTo((p.x+p.w*0.5)*W+8, H*0.5, p.x*W, H*0.85);
+    ctx.lineTo((p.x+p.w)*W, H*0.85);
+    ctx.quadraticCurveTo((p.x+p.w*0.5)*W-8, H*0.5, (p.x+p.w)*W, 0.05*H);
+    ctx.closePath(); ctx.fill();
+    // Fringe
+    ctx.strokeStyle = p.col2; ctx.lineWidth = 1; ctx.globalAlpha = 0.7;
+    for (let f = 0; f < 8; f++) {
+      const fx = (p.x + (f/8)*p.w)*W;
+      ctx.beginPath(); ctx.moveTo(fx, H*0.85); ctx.lineTo(fx+2, H*0.92); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  });
+  // Table with folded fabrics
+  ctx.fillStyle = '#4a3820'; ctx.fillRect(0, H*0.75, W, H*0.04);
+  // Fabric folds on table
+  [[0.05,'#3b4f68'],[0.2,'#4a6050'],[0.38,'#9a7c3a'],[0.55,'#6a4a30'],[0.72,'#3b4f68']].forEach(([x,col]) => {
+    ctx.fillStyle = col; ctx.globalAlpha = 0.85;
+    ctx.fillRect(x*W, H*0.79, W*0.12, H*0.12);
+    ctx.globalAlpha = 1;
+  });
+  grain(ctx, W, H, 0.04);
+}
+
+function init() {
+  drawIndigo('pc1');
+  drawGradient('pc2');
+  drawStripe('pc3');
+  drawEarth('pc4');
+  drawMarket('mc1');
+}
+
+window.addEventListener('load', init);
+window.addEventListener('resize', () => setTimeout(init, 100));
+</script>
+</body>
+</html>
