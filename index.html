@@ -10,11 +10,11 @@
 
 /* Force Chinese font rendering */
 html, body, p, span, div, h1, h2, h3, h4, li, a, label, option, textarea, input, select, button {
-  font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+  font-family: 'Noto Serif TC', '宋體', 'SimSun', 'NSimSun', 'PingFang TC', serif;
 }
 .hero-title, .section-title, .product-name, .craft-name, .about-title,
 .quote-text, .hero-tagline, .footer-logo, .nav-logo, .stat-num {
-  font-family: 'Cormorant Garamond', 'Noto Serif TC', 'PingFang TC', serif;
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', '宋體', 'SimSun', serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,8 +29,8 @@ html, body, p, span, div, h1, h2, h3, h4, li, a, label, option, textarea, input,
   --paper:  #f2ede4;
   --cream:  #f8f5ee;
   --fog:    #c8c2b4;
-  --serif: 'Cormorant Garamond', 'Noto Serif TC', 'PingFang TC', serif;
-  --sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+  --serif: 'Cormorant Garamond', 'Noto Serif TC', '宋體', 'SimSun', 'PingFang TC', serif;
+  --sans: 'Noto Serif TC', '宋體', 'SimSun', 'NSimSun', 'PingFang TC', serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -83,6 +83,13 @@ nav {
 .hero-visual {
   position: relative; overflow: hidden;
   background: #1e2430;
+}
+
+.hero-video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; inset: 0;
+  z-index: 1;
 }
 
 /* Fabric collage using CSS + actual photo colors */
@@ -154,12 +161,12 @@ nav {
   letter-spacing: 0.05em; color: var(--ink);
   opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
 }
-.hero-title em { font-style: italic; color: var(--moss); display: block; margin-top: 0.1em; }
+.hero-title em { font-style: normal; color: var(--moss); display: block; margin-top: 0.1em; }
 
 .hero-tagline {
   margin-top: 2rem;
   font-family: var(--serif);
-  font-size: 1rem; font-style: italic;
+  font-size: 1rem; font-style: normal;
   color: var(--bark); line-height: 1.6;
   opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
 }
@@ -228,7 +235,7 @@ nav {
   font-size: clamp(2rem, 3.2vw, 3rem);
   font-weight: 300; line-height: 1.2; color: var(--ink);
 }
-.section-title em { font-style: italic; color: var(--moss); }
+.section-title em { font-style: normal; color: var(--moss); }
 
 .about-body {
   margin-top: 2rem;
@@ -243,7 +250,7 @@ nav {
 }
 .quote-text {
   font-family: var(--serif); font-size: 1.05rem;
-  font-style: italic; color: var(--moss); line-height: 1.7;
+  font-style: normal; color: var(--moss); line-height: 1.7;
 }
 .quote-source {
   margin-top: 0.6rem; font-size: 0.65rem;
@@ -282,6 +289,40 @@ nav {
 #products {
   padding: 9rem 5rem;
   background: var(--cream);
+}
+
+/* GALLERY */
+#gallery {
+  padding: 5rem 5rem 7rem;
+  background: var(--cream);
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+.gallery-item {
+  overflow: hidden;
+  background: var(--mist);
+}
+.gallery-canvas {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.gallery-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.gallery-item:hover .gallery-img { transform: scale(1.06); }
+.gallery-item:hover .gallery-canvas { transform: scale(1.06); }
+@media (max-width: 960px) {
+  #gallery { padding: 4rem 2rem 5rem; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .section-header {
@@ -512,7 +553,7 @@ footer {
 }
 .footer-tagline {
   font-size: 0.65rem; letter-spacing: 0.15em; color: var(--stone);
-  font-style: italic;
+  font-style: normal;
 }
 .footer-links { display: flex; gap: 2rem; list-style: none; }
 .footer-links a {
@@ -559,8 +600,9 @@ footer {
     <span class="nav-sub">Stories in Fabric · Crafted with Time</span>
   </a>
   <ul class="nav-links">
-    <li><a href="#about">語木</a></li>
+    <li><a href="#about">關於</a></li>
     <li><a href="#products">作品</a></li>
+    <li><a href="#gallery">作品集</a></li>
     <li><a href="#craft">工藝</a></li>
     <li><a href="#contact">訂購</a></li>
   </ul>
@@ -569,27 +611,19 @@ footer {
 <!-- HERO -->
 <section id="hero">
   <div class="hero-visual">
-    <div class="fabric-bg">
-      <div class="fabric-row">
-        <div class="fswatch fs1"></div>
-        <div class="fswatch fs2"></div>
-        <div class="fswatch fs3"></div>
-      </div>
-      <div class="fabric-row">
-        <div class="fswatch fs4"></div>
-        <div class="fswatch fs5"></div>
-      </div>
-    </div>
+    <video class="hero-video" autoplay muted loop playsinline poster="">
+      <source src="yumu-hero-video.mp4" type="video/mp4">
+    </video>
     <div class="hero-overlay"></div>
     <div class="hero-badge">@yumuhandmade · 台灣草木染</div>
   </div>
 
   <div class="hero-content">
     <p class="hero-eyebrow">天然植物染色 · 手工布藝</p>
-    <h1 class="hero-title">YUMU<em>語木</em></h1>
+    <h1 class="hero-title">YUMU</h1>
     <p class="hero-tagline">Stories in Fabric &amp; Crafted with Time</p>
     <p class="hero-desc">
-      「語木」象徵與大地的對話，將故事編織進布料裡。<br>
+      與大地對話，將故事編織進布料裡。<br>
       我們以自然為師，運用植物的色彩，將自然的氣息織入日常——是一個專注於天然染織與手工布藝的品牌。
     </p>
     <div class="hero-cta">
@@ -619,57 +653,75 @@ footer {
     <p class="section-label">品牌故事</p>
     <h2 class="section-title">與大地<em>對話</em></h2>
     <div class="about-body">
-      <p>YUMU 語木，是一場與自然的長期對話。我們相信每一塊石頭、每一片葉脈、每一段樹皮都藏著顏色——等待被萃取、被記錄、被穿在身上。</p>
+      <p>YUMU，是一場與自然的長期對話。我們相信每一塊石頭、每一片葉脈、每一段樹皮都藏著顏色——等待被萃取、被記錄、被穿在身上。</p>
       <p>從台灣在地植物採集染料，以藍靛、相思木、野薑花等為顏料，透過浸染、型染、紮染等技法，讓每一件作品都成為一段無法複製的自然印記。</p>
     </div>
     <div class="quote-block">
       <p class="quote-text">「將故事編織進布料裡，讓自然的氣息織入日常。」</p>
-      <p class="quote-source">Yumu · 語木</p>
+      <p class="quote-source">Yumu</p>
     </div>
   </div>
 
   <div class="about-visual reveal" style="transition-delay:0.15s">
     <p class="palette-title">天然色譜 — 植物染料</p>
     <div class="palette-row">
-      <div class="swatch-block" style="background:#3b4f68;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#b0c4d8;">藍靛深</span></div>
+      <div class="swatch-block" style="background:#b89a4a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2e10;">石榴皮</span></div>
       </div>
-      <div class="swatch-block" style="background:#526878;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#c0d4e0;">山青</span></div>
+      <div class="swatch-block" style="background:#8a7a5a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#e8e0d0;">杜英</span></div>
       </div>
-      <div class="swatch-block" style="background:#6a8890;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#d0e4e8;">霧藍</span></div>
+      <div class="swatch-block" style="background:#c9a227;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2c08;">福木</span></div>
       </div>
-      <div class="swatch-block" style="background:#90aaa8;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#1a3038;">淺靛</span></div>
+      <div class="swatch-block" style="background:#4a4438;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#d8d0bc;">烏桕</span></div>
       </div>
-    </div>
-    <div class="palette-row">
-      <div class="swatch-block" style="background:#4a6050;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#c0d8c0;">艾草綠</span></div>
+      <div class="swatch-block" style="background:#8a4a32;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#f0d8c8;">桃花心木</span></div>
       </div>
-      <div class="swatch-block" style="background:#6a7858;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#d0e0c0;">山嵐</span></div>
-      </div>
-      <div class="swatch-block" style="background:#9a7c3a;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#f0e0a0;">薑黃</span></div>
-      </div>
-      <div class="swatch-block" style="background:#7a5c2a;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#e0c888;">相思棕</span></div>
+      <div class="swatch-block" style="background:#a8884a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2e10;">樟樹</span></div>
       </div>
     </div>
     <div class="palette-row">
-      <div class="swatch-block" style="background:#5a3820;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#d8b890;">苦楝深</span></div>
+      <div class="swatch-block" style="background:#6a3a28;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#e8d0c0;">兒茶</span></div>
       </div>
-      <div class="swatch-block" style="background:#8a6040;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#e8c898;">土陶</span></div>
+      <div class="swatch-block" style="background:#3a3530;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#d8d0c0;">五倍子</span></div>
       </div>
-      <div class="swatch-block" style="background:#b89070;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#3a2018;">野薑橙</span></div>
+      <div class="swatch-block" style="background:#2a4a68;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#c0d4e4;">馬藍</span></div>
       </div>
-      <div class="swatch-block" style="background:#c8a888;">
-        <div class="swatch-info"><span class="swatch-name" style="color:#2a1808;">稻穗</span></div>
+      <div class="swatch-block" style="background:#2c4f6e;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#c4d8e8;">蓼藍</span></div>
+      </div>
+      <div class="swatch-block" style="background:#1f3a55;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#b8cce0;">木藍</span></div>
+      </div>
+      <div class="swatch-block" style="background:#4a3550;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#dcc8e0;">墨水樹</span></div>
+      </div>
+    </div>
+    <div class="palette-row">
+      <div class="swatch-block" style="background:#8a4030;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#f0d4c8;">薯榔</span></div>
+      </div>
+      <div class="swatch-block" style="background:#c8843a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2408;">洋蔥皮</span></div>
+      </div>
+      <div class="swatch-block" style="background:#a87850;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2810;">柿子</span></div>
+      </div>
+      <div class="swatch-block" style="background:#6a6a40;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#e4e4cc;">瓊崖海棠</span></div>
+      </div>
+      <div class="swatch-block" style="background:#d9a83a;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#3a2c08;">黃梔子</span></div>
+      </div>
+      <div class="swatch-block" style="background:#7a4a38;">
+        <div class="swatch-info"><span class="swatch-name" style="color:#e8d4c8;">檳榔籽</span></div>
       </div>
     </div>
     <p class="palette-desc">↑ 懸停色塊查看色名 · 皆來自台灣在地植物萃取</p>
@@ -681,7 +733,7 @@ footer {
   <div class="section-header reveal">
     <div>
       <p class="section-label">精選作品</p>
-      <h2 class="section-title">每件，都是<em>孤品</em></h2>
+      <h2 class="section-title">每件作品<em>獨一無二</em></h2>
     </div>
     <span class="section-num">02</span>
   </div>
@@ -691,9 +743,9 @@ footer {
     <div class="product-card reveal">
       <canvas class="product-canvas" id="pc1"></canvas>
       <div class="product-overlay">
-        <div class="product-tag">藍靛草 · 亞麻 · 型染</div>
-        <div class="product-name">藍靛動物型染<br>圍巾</div>
-        <div class="product-price">NT$ 2,200 起</div>
+        <div class="product-tag">純棉 · 方格織紋 · 手工染製</div>
+        <div class="product-name">純棉方格圍巾</div>
+        <div class="product-price">NT$ 1,500 起</div>
         <a href="#contact" class="product-btn">詢問訂購</a>
       </div>
     </div>
@@ -701,9 +753,9 @@ footer {
     <div class="product-card reveal" style="transition-delay:0.1s">
       <canvas class="product-canvas" id="pc2"></canvas>
       <div class="product-overlay">
-        <div class="product-tag">多色植物染 · 手工漸層</div>
-        <div class="product-name">山色漸層圍巾</div>
-        <div class="product-price">NT$ 1,800 起</div>
+        <div class="product-tag">棉麻混紡 · 植物染</div>
+        <div class="product-name">棉麻混紡圍巾</div>
+        <div class="product-price">NT$ 2,000 起</div>
         <a href="#contact" class="product-btn">詢問訂購</a>
       </div>
     </div>
@@ -711,9 +763,9 @@ footer {
     <div class="product-card reveal" style="transition-delay:0.2s">
       <canvas class="product-canvas" id="pc3"></canvas>
       <div class="product-overlay">
-        <div class="product-tag">藍靛草 · 棉麻 · 紮染</div>
-        <div class="product-name">靛藍條紋<br>麻布巾</div>
-        <div class="product-price">NT$ 1,600 起</div>
+        <div class="product-tag">蠟染 · 型染 · 捺染</div>
+        <div class="product-name">蠟染 / 型染 / 捺染<br>門簾</div>
+        <div class="product-price">NT$ 1,800 起</div>
         <a href="#contact" class="product-btn">詢問訂購</a>
       </div>
     </div>
@@ -721,9 +773,19 @@ footer {
     <div class="product-card reveal" style="transition-delay:0.15s">
       <canvas class="product-canvas" id="pc4"></canvas>
       <div class="product-overlay">
-        <div class="product-tag">大地色系 · 漸層染</div>
-        <div class="product-name">大地色系托特包</div>
-        <div class="product-price">NT$ 2,800 起</div>
+        <div class="product-tag">大地色系 · 純棉</div>
+        <div class="product-name">大地色純棉手提袋</div>
+        <div class="product-price">NT$ 500 起</div>
+        <a href="#contact" class="product-btn">詢問訂購</a>
+      </div>
+    </div>
+    <!-- Card 5 -->
+    <div class="product-card reveal" style="transition-delay:0.25s">
+      <canvas class="product-canvas" id="pc5"></canvas>
+      <div class="product-overlay">
+        <div class="product-tag">純棉 · 手工染製</div>
+        <div class="product-name">純棉方巾</div>
+        <div class="product-price">NT$ 350 起</div>
         <a href="#contact" class="product-btn">詢問訂購</a>
       </div>
     </div>
@@ -731,6 +793,28 @@ footer {
 </section>
 
 <!-- CRAFT -->
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">作品集</p>
+      <h2 class="section-title">布料的<em>細節</em></h2>
+    </div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-item reveal"><img class="gallery-img" src="images/yumu-08.jpg" alt="YUMU 染色作品曬掛展示" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.05s"><img class="gallery-img" src="images/yumu-02.jpg" alt="YUMU 草木染托特包" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.1s"><img class="gallery-img" src="images/yumu-03.jpg" alt="YUMU 草木染側背包" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.15s"><img class="gallery-img" src="images/yumu-04.jpg" alt="YUMU 漸層染圍巾" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.2s"><img class="gallery-img" src="images/yumu-05.jpg" alt="YUMU 型染圍巾細節" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.25s"><img class="gallery-img" src="images/yumu-06.jpg" alt="YUMU 拼布漸層細節" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.3s"><img class="gallery-img" src="images/yumu-07.jpg" alt="YUMU 圖紋染色細節" loading="lazy"></div>
+    <div class="gallery-item reveal" style="transition-delay:0.35s"><img class="gallery-img" src="images/yumu-01.jpg" alt="YUMU 紮染圍巾" loading="lazy"></div>
+  </div>
+  <p class="palette-desc" style="margin-top:1.5rem">作品實拍 · 每件皆為手工染製的獨一無二之作</p>
+</section>
+
 <section id="craft">
   <div class="section-header reveal" style="border-bottom-color:rgba(232,221,212,0.1)">
     <div>
@@ -831,20 +915,20 @@ footer {
 
   <div class="reveal" style="transition-delay:0.15s">
     <p class="section-label" style="margin-bottom:1.5rem">填寫詢問表單</p>
-    <div class="order-form">
+    <form class="order-form" id="yumuForm" action="https://formspree.io/f/mwvdeowe" method="POST">
       <div class="form-row">
         <div>
           <label class="form-label">姓名</label>
-          <input class="form-input" type="text" placeholder="您的名字">
+          <input class="form-input" type="text" name="姓名" placeholder="您的名字" required>
         </div>
         <div>
           <label class="form-label">聯絡方式</label>
-          <input class="form-input" type="text" placeholder="Email 或 IG 帳號">
+          <input class="form-input" type="text" name="聯絡方式" placeholder="Email 或 IG 帳號" required>
         </div>
       </div>
       <div>
         <label class="form-label">感興趣的品項</label>
-        <select class="form-select">
+        <select class="form-select" name="感興趣的品項">
           <option value="">請選擇</option>
           <option>藍靛動物型染圍巾</option>
           <option>山色漸層圍巾</option>
@@ -856,20 +940,65 @@ footer {
       </div>
       <div>
         <label class="form-label">需求說明</label>
-        <textarea class="form-textarea" placeholder="請描述您的需求，例如：顏色偏好、尺寸、數量、或特別想法…"></textarea>
+        <textarea class="form-textarea" name="需求說明" placeholder="請描述您的需求，例如：顏色偏好、尺寸、數量、或特別想法…"></textarea>
       </div>
-      <button class="btn-primary" style="border:none;cursor:pointer;padding:1rem 2.5rem;width:fit-content">送出詢問</button>
-    </div>
+      <!-- Honeypot field to reduce spam -->
+      <input type="text" name="_gotcha" style="display:none">
+      <!-- Custom subject line for the notification email -->
+      <input type="hidden" name="_subject" value="YUMU 網站新詢問">
+      <button type="submit" class="btn-primary" style="border:none;cursor:pointer;padding:1rem 2.5rem;width:fit-content">送出詢問</button>
+      <p id="formStatus" style="font-size:0.78rem; margin-top:0.5rem; display:none;"></p>
+    </form>
   </div>
 </section>
+
+<script>
+const yumuForm = document.getElementById('yumuForm');
+const formStatus = document.getElementById('formStatus');
+if (yumuForm) {
+  yumuForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const submitBtn = yumuForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '送出中…';
+    submitBtn.disabled = true;
+
+    try {
+      const formData = new FormData(yumuForm);
+      const response = await fetch(yumuForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        formStatus.style.display = 'block';
+        formStatus.style.color = '#4a6050';
+        formStatus.textContent = '感謝您的詢問！我們已收到訊息，將盡快與您聯繫。';
+        yumuForm.reset();
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (error) {
+      formStatus.style.display = 'block';
+      formStatus.style.color = '#a04040';
+      formStatus.textContent = '送出時發生問題，請稍後再試，或直接透過 Instagram 私訊我們。';
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+}
+</script>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">YUMU</div>
   <p class="footer-tagline">Stories in Fabric · Crafted with Time</p>
   <ul class="footer-links">
-    <li><a href="#about">語木</a></li>
+    <li><a href="#about">關於</a></li>
     <li><a href="#products">作品</a></li>
+    <li><a href="#gallery">作品集</a></li>
     <li><a href="#craft">工藝</a></li>
     <li><a href="#contact">訂購</a></li>
   </ul>
@@ -1046,12 +1175,37 @@ function drawMarket(id) {
   grain(ctx, W, H, 0.04);
 }
 
+function drawTile(id, baseColors) {
+  const c = document.getElementById(id); if (!c) return;
+  const dpr = devicePixelRatio || 1;
+  c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const W = c.offsetWidth, H = c.offsetHeight;
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  baseColors.forEach((col, i) => g.addColorStop(i / (baseColors.length - 1), col));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.globalAlpha = 0.08; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.6;
+  for (let y = 0; y < H; y += 4) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  ctx.restore();
+  grain(ctx, W, H, 0.06);
+}
+
 function init() {
   drawIndigo('pc1');
   drawGradient('pc2');
   drawStripe('pc3');
   drawEarth('pc4');
+  drawTile('pc5', ['#8a7a5a', '#b89a4a']);
   drawMarket('mc1');
+
+  drawTile('g1', ['#3b4f68', '#2a3848']);
+  drawTile('g2', ['#4a6050', '#6a7858']);
+  drawTile('g3', ['#9a7c3a', '#7a5c28']);
+  drawTile('g4', ['#5a3820', '#8a6040']);
+  drawTile('g5', ['#1a2840', '#3a5060']);
+  drawTile('g6', ['#6a8090', '#90aaa8']);
+  drawTile('g7', ['#7a5c2a', '#b89060']);
+  drawTile('g8', ['#3d4a32', '#5c6b4a']);
 }
 
 window.addEventListener('load', init);
